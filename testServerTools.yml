@@ -41,7 +41,7 @@
   - name: Unzip ChromeDriver
     command: unzip chromedriver_linux64.zip
   - name: Move ChromeDriver Zip File
-    command: mv chromedriver /home/mdanwarjamal
+    command: mv chromedriver /home/mdanwarjamal/
   handlers:
   - name: apt cache update
     apt:
