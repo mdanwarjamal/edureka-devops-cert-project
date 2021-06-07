@@ -1,5 +1,5 @@
 ---
-- hosts: testServer
+- hosts: prodServer
   become: yes
   vars:
     dockerImage: "mdanwarjamal/edureka-devops-cert-app"
