@@ -51,6 +51,10 @@ try{
 		    ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'StopAppOnTestServer.yml'
 		}
             }
+	    stage('Provision Tool on Prod Server'){
+	        echo "Provisioning Tools required for deployment PHP Application Deployment on Prod Servers"
+	        ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'prodServerTools.yml'
+	    }
             stage('Deploy Application on Prod Server'){
                 echo "Deploying containerized PHP Application on Prod Servers"
                 ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'prodServerDeployment.yml'
