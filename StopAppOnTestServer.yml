@@ -3,7 +3,7 @@
   become: yes
   tasks:
   - name: Stop Running All Containers
-    command: sudo docker stop `sudo docker ps -a -q`
+    command: sudo docker stop eudreka-php-app
   - name: Remove All existing Containers
-    command: sudo docker rm `sudo docker ps -a -q` 
+    command: sudo docker rm eudreka-php-app
 ...
