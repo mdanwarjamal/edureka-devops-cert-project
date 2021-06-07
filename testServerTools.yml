@@ -1,0 +1,49 @@
+---
+- hosts: testServer
+  become: yes
+  tasks:
+    - name: Install Git
+      apt:
+        pkg: git
+        state: present
+        update_cache: yes
+    - name: Install JDK 11
+      apt:
+        pkg: openjdk-11-jdk
+        state: present
+    - name: Install Docker
+      apt:
+        pkg: docker.io
+        state: present
+      notify:
+      - apt cache update
+    - name: Start Docker Service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    - name: Ensure wget is installed
+      apt:
+        pkg: wget
+        state: present
+    - name: Download Chrome Browser
+      command: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - name: Install Chrome Browser
+      comand: apt install ./google-chrome-stable_current_amd64.deb -y
+      notify:
+      - apt cache update
+    - name: Download ChromeDriver
+      command: wget https://chromedriver.storage.googleapis.com/91.0.4472.19/chromedriver_linux64.zip
+    - name: Install Unzip Utility
+      apt:
+        pkg: unzip
+        state: present
+    - name: Unzip ChromeDriver
+      command: unzip chromedriver_linux64.zip
+    - name: Move ChromeDriver Zip File
+      command: mv chromedriver /home/mdanwarjamal
+    handlers:
+    - name: apt cache update
+      apt:
+        update_cache: yes
+...
