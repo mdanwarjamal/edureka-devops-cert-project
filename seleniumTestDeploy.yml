@@ -1,0 +1,11 @@
+---
+- hosts: testServer
+  become: yes
+  tasks:
+  - name: Copy Selenium Test JAR File over to Test Server
+    copy:
+      src: seleniumTest.jar
+      dest: /home/mdanwarjamal/seleniumTest.jar
+  - name: Execute Selenium Test
+    command: sudo java -jar seleniumTest.jar
+...
