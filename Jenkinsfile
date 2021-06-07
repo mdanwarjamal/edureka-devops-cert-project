@@ -44,7 +44,12 @@ try{
             }
             stage('Automation Test on Test Server'){
                 echo "Testing the Application Deployment of PHP Application on Test Servers"
-                sh "sudo ${java} -jar seleniumTest.jar"
+		try{
+		    sh "sudo ${java} -jar seleniumTest.jar"
+		}catch(Exception e){
+		    echo "Stopping and Removing all COntainers on Test Server"
+		    ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'StopAppOnTestServer.yml'
+		}
             }
             stage('Deploy Application on Prod Server'){
                 echo "Deploying containerized PHP Application on Prod Servers"
@@ -56,10 +61,4 @@ try{
 catch(Exception ex){
         echo "Some Exception Occured"
         currentBuild.result = 'FAILURE'
-}
-finally{
-	stage('Remove Containers'){
-		echo "Stopping and Removing all COntainers on Test Server"
-		ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'StopAppOnTestServer.yml'
-	}
 }
