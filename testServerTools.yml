@@ -39,7 +39,7 @@
       pkg: unzip
       state: present
   - name: Unzip ChromeDriver
-    command: unzip chromedriver_linux64.zip
+    command: unzip -o -q chromedriver_linux64.zip
   - name: Move ChromeDriver Zip File
     command: mv chromedriver /home/mdanwarjamal/
   handlers:
