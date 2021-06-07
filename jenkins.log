@@ -1,0 +1,274 @@
+Started by GitHub push by mdanwarjamal
+Obtained Jenkinsfile from git https://github.com/mdanwarjamal/edureka-devops-cert-project.git
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/Edureka DevOps CI-CD
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Prepare)
+[Pipeline] echo
+Prepare Tools and Variables to be used in Pipeline Script
+[Pipeline] tool
+[Pipeline] tool
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] echo
+Checkout Application Code from GitHub Repository
+[Pipeline] git
+The recommended git tool is: git
+using credential GitHub
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/Edureka DevOps CI-CD/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/mdanwarjamal/edureka-devops-cert-project.git # timeout=10
+Fetching upstream changes from https://github.com/mdanwarjamal/edureka-devops-cert-project.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.25.1'
+using GIT_ASKPASS to set credentials GitHub Login Credentials
+ > git fetch --tags --force --progress -- https://github.com/mdanwarjamal/edureka-devops-cert-project.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 63be1d257e2407ab9a71126af5dc6a3e3e00e970 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 63be1d257e2407ab9a71126af5dc6a3e3e00e970 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main 63be1d257e2407ab9a71126af5dc6a3e3e00e970 # timeout=10
+Commit message: "Add files via upload"
+ > git rev-list --no-walk 3fca57f520f366a498f132a2a53478d27756899a # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Provision Tool on Test Server)
+[Pipeline] echo
+Provisioning Tools required for deployment and testing PHP Application Deployment on Test Servers
+[Pipeline] ansiblePlaybook
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook testServerTools.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh17315374097598720025.key" -u mdanwarjamal
+
+PLAY [testServer] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.31.7.163]
+
+TASK [Install Git] *************************************************************
+ok: [172.31.7.163]
+
+TASK [Install JDK 11] **********************************************************
+ok: [172.31.7.163]
+
+TASK [Install Docker] **********************************************************
+ok: [172.31.7.163]
+
+TASK [Start Docker Service] ****************************************************
+ok: [172.31.7.163]
+
+TASK [Ensure wget is installed] ************************************************
+ok: [172.31.7.163]
+
+TASK [Download Chrome Browser] *************************************************
+[WARNING]: Consider using the get_url or uri module rather than running 'wget'.
+If you need to use command because get_url or uri is insufficient you can add
+'warn: false' to this command task or set 'command_warnings=False' in
+ansible.cfg to get rid of this message.
+changed: [172.31.7.163]
+
+TASK [Install Chrome Browser] **************************************************
+changed: [172.31.7.163]
+
+TASK [Download ChromeDriver] ***************************************************
+changed: [172.31.7.163]
+
+TASK [Install Unzip Utility] ***************************************************
+ok: [172.31.7.163]
+
+TASK [Unzip ChromeDriver] ******************************************************
+[WARNING]: Consider using the unarchive module rather than running 'unzip'.  If
+you need to use command because unarchive is insufficient you can add 'warn:
+false' to this command task or set 'command_warnings=False' in ansible.cfg to
+get rid of this message.
+changed: [172.31.7.163]
+
+RUNNING HANDLER [apt cache update] *********************************************
+changed: [172.31.7.163]
+
+PLAY RECAP *********************************************************************
+172.31.7.163               : ok=12   changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker Image)
+[Pipeline] echo
+Build Docker image from Dockerfile
+[Pipeline] sh
++ sudo /usr/bin/docker build -t mdanwarjamal/edureka-devops-cert-app:1.0 .
+Sending build context to Docker daemon  57.89MB
+Step 1/4 : FROM devopsedu/webapp
+ ---> 0ef91240e173
+Step 2/4 : ADD website /var/www/html
+ ---> Using cache
+ ---> 28b2ed4a5036
+Step 3/4 : RUN rm /var/www/html/index.html
+ ---> Using cache
+ ---> e80fe491a1fb
+Step 4/4 : CMD apachectl -D FOREGROUND
+ ---> Using cache
+ ---> 052335301648
+Successfully built 052335301648
+Successfully tagged mdanwarjamal/edureka-devops-cert-app:1.0
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push to DockerHub)
+[Pipeline] echo
+Push Docker Image to DockerHub Online Registry
+[Pipeline] withCredentials
+Masking supported pattern matches of $dockerHubPwd
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [dockerHubUsername, dockerHubPwd]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ sudo /usr/bin/docker login -u mdanwarjamal -p ****
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [dockerHubUsername]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ sudo /usr/bin/docker push mdanwarjamal/edureka-devops-cert-app:1.0
+The push refers to repository [docker.io/mdanwarjamal/edureka-devops-cert-app]
+f7cc8d140f55: Preparing
+92cbe2e0b256: Preparing
+7a2921c5effc: Preparing
+754d8c63561b: Preparing
+059ad60bcacf: Preparing
+8db5f072feec: Preparing
+67885e448177: Preparing
+ec75999a0cb1: Preparing
+65bdd50ee76a: Preparing
+8db5f072feec: Waiting
+67885e448177: Waiting
+ec75999a0cb1: Waiting
+65bdd50ee76a: Waiting
+754d8c63561b: Layer already exists
+f7cc8d140f55: Layer already exists
+92cbe2e0b256: Layer already exists
+059ad60bcacf: Layer already exists
+7a2921c5effc: Layer already exists
+67885e448177: Layer already exists
+8db5f072feec: Layer already exists
+ec75999a0cb1: Layer already exists
+65bdd50ee76a: Layer already exists
+1.0: digest: sha256:233412a3fe975ce83d0d42152719432cb722468887929dae72d7869a291c1c46 size: 2191
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Application on Test Server)
+[Pipeline] echo
+Deploying containerized PHP Application on Test Servers
+[Pipeline] ansiblePlaybook
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook testServerDeployment.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh17967349716331499301.key" -u mdanwarjamal
+
+PLAY [testServer] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.31.7.163]
+
+TASK [Ensure Docker Service is Running] ****************************************
+ok: [172.31.7.163]
+
+TASK [Run Docker Image of PHP Application] *************************************
+[WARNING]: Consider using 'become', 'become_method', and 'become_user' rather
+than running sudo
+changed: [172.31.7.163]
+
+PLAY RECAP *********************************************************************
+172.31.7.163               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Automation Test on Test Server)
+[Pipeline] echo
+Testing the Application Deployment of PHP Application on Test Servers
+[Pipeline] ansiblePlaybook
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook seleniumTestDeploy.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh13517590320491355620.key" -u mdanwarjamal
+
+PLAY [testServer] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.31.7.163]
+
+TASK [Copy Selenium Test JAR File over to Test Server] *************************
+changed: [172.31.7.163]
+
+TASK [Execute Selenium Test] ***************************************************
+[WARNING]: Consider using 'become', 'become_method', and 'become_user' rather
+than running sudo
+changed: [172.31.7.163]
+
+PLAY RECAP *********************************************************************
+172.31.7.163               : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Provision Tool on Prod Server)
+[Pipeline] echo
+Provisioning Tools required for deployment PHP Application Deployment on Prod Servers
+[Pipeline] ansiblePlaybook
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook prodServerTools.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh17623334658741377756.key" -u mdanwarjamal
+
+PLAY [prodServer] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.31.3.202]
+
+TASK [Install Docker] **********************************************************
+ok: [172.31.3.202]
+
+TASK [Start Docker Service] ****************************************************
+ok: [172.31.3.202]
+
+PLAY RECAP *********************************************************************
+172.31.3.202               : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Application on Prod Server)
+[Pipeline] echo
+Deploying containerized PHP Application on Prod Servers
+[Pipeline] ansiblePlaybook
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook prodServerDeployment.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh15335528547905635625.key" -u mdanwarjamal
+
+PLAY [prodServer] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.31.3.202]
+
+TASK [Ensure Docker Service is Running] ****************************************
+ok: [172.31.3.202]
+
+TASK [Run Docker Image of PHP Application] *************************************
+[WARNING]: Consider using 'become', 'become_method', and 'become_user' rather
+than running sudo
+changed: [172.31.3.202]
+
+PLAY RECAP *********************************************************************
+172.31.3.202               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
