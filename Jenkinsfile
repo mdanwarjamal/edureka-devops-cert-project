@@ -45,7 +45,7 @@ try{
             stage('Automation Test on Test Server'){
                 echo "Testing the Application Deployment of PHP Application on Test Servers"
 		try{
-		    sh "sudo ${java} -jar seleniumTest.jar"
+		    ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'seleniumTestDeploy.yml'
 		}catch(Exception e){
 		    echo "Stopping and Removing all COntainers on Test Server"
 		    ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'StopAppOnTestServer.yml'
