@@ -1,0 +1,9 @@
+---
+- hosts: testServer
+  become: yes
+  tasks:
+  - name: Stop Running All Containers
+    command: sudo docker stop $(sudo docker ps -aq)
+  - name: Remove All existing Containers
+    command: sudo docker rm $(sudo docker ps -aq)
+...
