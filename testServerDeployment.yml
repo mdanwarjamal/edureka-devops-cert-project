@@ -10,7 +10,7 @@
   - name: Ensure Docker Service is Running
     service:
       name: docker
-      state: running
+      state: started
   - name: Run Docker Image of PHP Application
     command: sudo docker run -d -p {{ applicationPort }}:80 --name {{ containerName }} {{ dockerImage }}:{{ tagName }}
 ...
