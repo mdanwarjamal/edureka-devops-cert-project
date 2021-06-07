@@ -34,7 +34,7 @@ try{
             stage('Push to DockerHub'){
                 echo "Push Docker Image to DockerHub Online Registry"
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'dockerHubPwd', usernameVariable: 'dockerHubUsername')]) {
-                    sh "sudo ${dockerCMD} login -u ${dockerHubUsername}  -p ${dockerHubPwd}"
+                    sh "sudo ${dockerCMD} login -u ${dockerHubUsername} -p ${dockerHubPwd}"
                     sh "sudo ${dockerCMD} push  ${dockerImage}:${tagName}"
                 }
             }
