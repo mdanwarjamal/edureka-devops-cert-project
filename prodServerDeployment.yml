@@ -1,0 +1,16 @@
+---
+- hosts: testServer
+  become: yes
+  vars:
+    dockerImage: "mdanwarjamal/edureka-devops-cert-app"
+    tagName: "1.0"
+    containerName: "eudreka-php-app"
+    applicationPort: "8888"
+  tasks:
+  - name: Ensure Docker Service is Running
+    service:
+      name: docker
+      state: running
+  - name: Run Docker Image of PHP Application
+    command: sudo docker run -d -p {{ applicationPort }}:80 --name {{ containerName }} {{ dockerImage }}:{{ tagName }}
+...
