@@ -58,7 +58,7 @@ catch(Exception ex){
         currentBuild.result = 'FAILURE'
 }
 finally{
-	stage('Remove Containers"){
+	stage('Remove Containers'){
 		echo "Stopping and Removing all COntainers on Test Server"
 		ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'StopAppOnTestServer.yml'
 	}
