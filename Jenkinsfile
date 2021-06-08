@@ -49,6 +49,7 @@ try{
 		}catch(Exception e){
 		    echo "Stopping and Removing all COntainers on Test Server"
 		    ansiblePlaybook credentialsId: 'AnsibleSSH', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'StopAppOnTestServer.yml'
+		    throw e;
 		}
             }
 	    stage('Provision Tool on Prod Server'){
