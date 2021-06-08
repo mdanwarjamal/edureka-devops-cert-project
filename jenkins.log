@@ -29,14 +29,14 @@ Fetching upstream changes from https://github.com/mdanwarjamal/edureka-devops-ce
 using GIT_ASKPASS to set credentials GitHub Login Credentials
  > git fetch --tags --force --progress -- https://github.com/mdanwarjamal/edureka-devops-cert-project.git +refs/heads/*:refs/remotes/origin/* # timeout=10
  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
-Checking out Revision 63be1d257e2407ab9a71126af5dc6a3e3e00e970 (refs/remotes/origin/main)
+Checking out Revision 172d3f3ed45261727f53c496f6959b2fb7039fe8 (refs/remotes/origin/main)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 63be1d257e2407ab9a71126af5dc6a3e3e00e970 # timeout=10
+ > git checkout -f 172d3f3ed45261727f53c496f6959b2fb7039fe8 # timeout=10
  > git branch -a -v --no-abbrev # timeout=10
  > git branch -D main # timeout=10
- > git checkout -b main 63be1d257e2407ab9a71126af5dc6a3e3e00e970 # timeout=10
-Commit message: "Add files via upload"
- > git rev-list --no-walk 3fca57f520f366a498f132a2a53478d27756899a # timeout=10
+ > git checkout -b main 172d3f3ed45261727f53c496f6959b2fb7039fe8 # timeout=10
+Commit message: "Add proper exception handling on failed Selenium Test"
+ > git rev-list --no-walk 59ac4960cbbb834e4e21fc02a9f8c1ea45a7a455 # timeout=10
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
@@ -44,7 +44,7 @@ Commit message: "Add files via upload"
 [Pipeline] echo
 Provisioning Tools required for deployment and testing PHP Application Deployment on Test Servers
 [Pipeline] ansiblePlaybook
-[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook testServerTools.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh17315374097598720025.key" -u mdanwarjamal
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook testServerTools.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh13669149848164203116.key" -u mdanwarjamal
 
 PLAY [testServer] **************************************************************
 
@@ -103,7 +103,7 @@ PLAY RECAP *********************************************************************
 Build Docker image from Dockerfile
 [Pipeline] sh
 + sudo /usr/bin/docker build -t mdanwarjamal/edureka-devops-cert-app:1.0 .
-Sending build context to Docker daemon  57.89MB
+Sending build context to Docker daemon  57.91MB
 Step 1/4 : FROM devopsedu/webapp
  ---> 0ef91240e173
 Step 2/4 : ADD website /var/www/html
@@ -156,15 +156,15 @@ ec75999a0cb1: Preparing
 67885e448177: Waiting
 ec75999a0cb1: Waiting
 65bdd50ee76a: Waiting
-754d8c63561b: Layer already exists
-f7cc8d140f55: Layer already exists
 92cbe2e0b256: Layer already exists
 059ad60bcacf: Layer already exists
 7a2921c5effc: Layer already exists
-67885e448177: Layer already exists
+754d8c63561b: Layer already exists
+f7cc8d140f55: Layer already exists
 8db5f072feec: Layer already exists
-ec75999a0cb1: Layer already exists
+67885e448177: Layer already exists
 65bdd50ee76a: Layer already exists
+ec75999a0cb1: Layer already exists
 1.0: digest: sha256:233412a3fe975ce83d0d42152719432cb722468887929dae72d7869a291c1c46 size: 2191
 [Pipeline] }
 [Pipeline] // withCredentials
@@ -175,7 +175,7 @@ ec75999a0cb1: Layer already exists
 [Pipeline] echo
 Deploying containerized PHP Application on Test Servers
 [Pipeline] ansiblePlaybook
-[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook testServerDeployment.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh17967349716331499301.key" -u mdanwarjamal
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook testServerDeployment.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh15952349900066103837.key" -u mdanwarjamal
 
 PLAY [testServer] **************************************************************
 
@@ -200,7 +200,7 @@ PLAY RECAP *********************************************************************
 [Pipeline] echo
 Testing the Application Deployment of PHP Application on Test Servers
 [Pipeline] ansiblePlaybook
-[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook seleniumTestDeploy.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh13517590320491355620.key" -u mdanwarjamal
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook seleniumTestDeploy.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh14341677320709473586.key" -u mdanwarjamal
 
 PLAY [testServer] **************************************************************
 
@@ -208,7 +208,7 @@ TASK [Gathering Facts] *********************************************************
 ok: [172.31.7.163]
 
 TASK [Copy Selenium Test JAR File over to Test Server] *************************
-changed: [172.31.7.163]
+ok: [172.31.7.163]
 
 TASK [Execute Selenium Test] ***************************************************
 [WARNING]: Consider using 'become', 'become_method', and 'become_user' rather
@@ -216,7 +216,7 @@ than running sudo
 changed: [172.31.7.163]
 
 PLAY RECAP *********************************************************************
-172.31.7.163               : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+172.31.7.163               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
 [Pipeline] }
 [Pipeline] // stage
@@ -225,7 +225,7 @@ PLAY RECAP *********************************************************************
 [Pipeline] echo
 Provisioning Tools required for deployment PHP Application Deployment on Prod Servers
 [Pipeline] ansiblePlaybook
-[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook prodServerTools.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh17623334658741377756.key" -u mdanwarjamal
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook prodServerTools.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh15228892271479102656.key" -u mdanwarjamal
 
 PLAY [prodServer] **************************************************************
 
@@ -248,7 +248,7 @@ PLAY RECAP *********************************************************************
 [Pipeline] echo
 Deploying containerized PHP Application on Prod Servers
 [Pipeline] ansiblePlaybook
-[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook prodServerDeployment.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh15335528547905635625.key" -u mdanwarjamal
+[Edureka DevOps CI-CD] $ /usr/bin/ansible-playbook prodServerDeployment.yml -i /etc/ansible/hosts --private-key "/var/lib/jenkins/workspace/Edureka DevOps CI-CD/ssh4208103634102495546.key" -u mdanwarjamal
 
 PLAY [prodServer] **************************************************************
 
